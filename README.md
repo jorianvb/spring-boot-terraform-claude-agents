@@ -1,25 +1,28 @@
-# Spring Boot + Terraform avec agents Claude
+# Agents Claude — monorepo de tutoriels et projets
 
-Ce depot accompagne le tutoriel **"Créer et utiliser des agents Claude pour un projet Spring Boot + Terraform"**
-(du cadrage a la mise en production).
+Ce dépôt regroupe plusieurs projets qui montrent comment utiliser les agents Claude
+(Claude Code, subagents, Skills, Agent SDK, tâches planifiées) sur des cas concrets.
 
-👉 Le tutoriel complet est dans [`docs/tutoriel-agents-claude-spring-terraform.md`](docs/tutoriel-agents-claude-spring-terraform.md).
+## Projets
 
-## Contenu du depot
+### [`spring-boot-terraform-agents/`](spring-boot-terraform-agents/)
+Développer un projet **Spring Boot (DDD) + infrastructure Terraform**, de la spec à la mise en
+production, avec Claude Code, des subagents de revue (code, Terraform, sécurité), des Skills,
+l'Agent SDK / le SDK Java, et une option Ollama en local.
+👉 [Tutoriel complet](spring-boot-terraform-agents/docs/tutoriel-agents-claude-spring-terraform.md)
 
-- `CLAUDE.md` : la memoire de projet lue automatiquement par Claude Code.
-- `.claude/skills/` : les Skills du projet (DDD, client REST, JPA, Terraform, revue, securite).
-- `.claude/agents/` : les subagents du projet (revue de code, revue Terraform, redaction de tests, audit securite, revue de doc).
-- `.github/workflows/claude-review.yml` : revue automatique des pull requests par Claude Code.
-- `docs/architecture.md` : l'architecture DDD + Terraform du projet.
-- `spring-boot-app/` : squelette de l'application Spring Boot.
-- `terraform/` : squelette de l'infrastructure Terraform.
+### [`travel-planner-agent/`](travel-planner-agent/)
+Un système d'agents Claude pour **planifier un voyage soi-même** : recherche de destination,
+construction d'itinéraire, veille tarifaire automatisée (tâche planifiée), repérage d'événements
+locaux. Ce n'est pas une agence de voyage : aucun agent ne réserve ni ne paie à ta place.
+👉 [Tutoriel complet](travel-planner-agent/docs/tutoriel-travel-planner-agent.md)
 
-## Demarrer
+## Pourquoi un seul dépôt pour deux projets différents ?
 
-```bash
-npm install -g @anthropic-ai/claude-code
-claude
-```
+Les deux projets utilisent la même "boîte à outils" Claude Code (`CLAUDE.md`, `.claude/agents/`,
+`.claude/skills/`, workflows GitHub Actions), appliquée à deux domaines très différents — du code
+d'un côté, de la recherche/veille de l'autre. C'est volontaire : voir comment les mêmes briques
+s'adaptent à des besoins différents est la meilleure façon de comprendre ce qu'elles font vraiment.
 
-Claude Code charge automatiquement `CLAUDE.md`, les Skills et les subagents de ce depot.
+Chaque projet a son propre `CLAUDE.md`, chargé automatiquement par Claude Code quand tu travailles
+dans son dossier — les deux ne se mélangent pas.
