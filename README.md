@@ -3,6 +3,12 @@
 Ce dépôt regroupe plusieurs projets qui montrent comment utiliser les agents Claude
 (Claude Code, subagents, Skills, Agent SDK, tâches planifiées) sur des cas concrets.
 
+## Commencer ici
+
+👉 [**Tutoriel général : comprendre, créer et gérer des agents Claude (subagents)**](docs/tutoriel-creer-des-agents-claude.md)
+— la mécanique de base (anatomie d'un subagent, où le ranger, comment l'invoquer, comment en ajouter un
+à un projet existant) avant de plonger dans l'un des deux projets ci-dessous.
+
 ## Projets
 
 ### [`spring-boot-terraform-agents/`](spring-boot-terraform-agents/)
