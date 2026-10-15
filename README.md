@@ -23,12 +23,20 @@ construction d'itinéraire, veille tarifaire automatisée (tâche planifiée), r
 locaux. Ce n'est pas une agence de voyage : aucun agent ne réserve ni ne paie à ta place.
 👉 [Tutoriel complet](travel-planner-agent/docs/tutoriel-travel-planner-agent.md)
 
-## Pourquoi un seul dépôt pour deux projets différents ?
+### [`photo-storage-agent/`](photo-storage-agent/)
+Un système d'agents Claude pour **gérer une bibliothèque de photos personnelles** : enrichissement
+de métadonnées, détection de doublons, vérification de sauvegarde (tâche planifiée), proposition
+d'albums, suivi du coût de stockage, vérification de confidentialité avant partage. Aucun agent ne
+supprime, ne déplace ni ne partage un fichier à ta place.
+👉 [Tutoriel complet](photo-storage-agent/docs/tutoriel-photo-storage-agent.md)
 
-Les deux projets utilisent la même "boîte à outils" Claude Code (`CLAUDE.md`, `.claude/agents/`,
-`.claude/skills/`, workflows GitHub Actions), appliquée à deux domaines très différents — du code
-d'un côté, de la recherche/veille de l'autre. C'est volontaire : voir comment les mêmes briques
-s'adaptent à des besoins différents est la meilleure façon de comprendre ce qu'elles font vraiment.
+## Pourquoi un seul dépôt pour plusieurs projets différents ?
+
+Les trois projets utilisent la même "boîte à outils" Claude Code (`CLAUDE.md`, `.claude/agents/`,
+`.claude/skills/`, automatisation planifiée), appliquée à des domaines très différents — du code
+d'un côté, de la recherche/veille de l'autre, de l'analyse d'une bibliothèque de fichiers du
+troisième. C'est volontaire : voir comment les mêmes briques s'adaptent à des besoins différents
+est la meilleure façon de comprendre ce qu'elles font vraiment.
 
 Chaque projet a son propre `CLAUDE.md`, chargé automatiquement par Claude Code quand tu travailles
 dans son dossier — les deux ne se mélangent pas.
