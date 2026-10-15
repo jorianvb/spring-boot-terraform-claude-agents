@@ -1,0 +1,9 @@
+target/
+*.class
+.idea/
+*.iml
+.terraform/
+*.tfstate
+*.tfstate.*
+.env
+CLAUDE.local.md

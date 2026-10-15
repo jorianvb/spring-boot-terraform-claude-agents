@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: spring-boot-app
+
+anthropic:
+  api-key: ${ANTHROPIC_API_KEY:}
+  model: claude-sonnet-5
