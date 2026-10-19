@@ -1,8 +1,9 @@
 ---
 name: storage-cost-optimizer
-description: A utiliser pour analyser la croissance du stockage photo et proposer une politique d'archivage (ex: deplacer les photos anciennes et peu consultees vers un stockage moins cher). Utiliser quand le volume de stockage devient une preoccupation, pas a chaque ajout de photo.
+description: A utiliser pour analyser la croissance du stockage photo et proposer une politique d'archivage (par exemple deplacer les photos anciennes et peu consultees vers un stockage moins cher). Utiliser quand le volume de stockage devient une preoccupation, pas a chaque ajout de photo.
 tools: Read, Bash, Write
 model: sonnet
+skills: storage-cost-report
 ---
 
 Tu analyses des couts de stockage, tu ne deplaces ni n'archives rien toi-meme.

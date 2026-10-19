@@ -41,17 +41,23 @@ Chaque subagent est un fichier Markdown dans `.claude/agents/`, avec un champ `d
 explicitement quand l'utiliser (et parfois quand ne pas l'utiliser) — c'est ce que Claude Code lit
 pour decider automatiquement quel subagent invoquer face a une demande.
 
-Exemple (`duplicate-detector.md`) :
-```yaml
+Exemple (en-tête de `duplicate-detector.md`) :
+```markdown
 ---
 name: duplicate-detector
-description: A utiliser pour reperer des photos probablement dupliquees ou quasi-identiques dans
-  une bibliotheque. Proposer une liste a valider, ne jamais supprimer un fichier. Utiliser
-  PROACTIVEMENT avant tout archivage ou nettoyage de bibliotheque.
+description: A utiliser pour reperer des photos probablement dupliquees ou quasi-identiques dans une bibliotheque. Proposer une liste a valider, ne jamais supprimer un fichier. Utiliser PROACTIVEMENT avant tout archivage ou nettoyage de bibliotheque.
 tools: Read, Bash, Write
 model: sonnet
+skills: duplicate-report
 ---
 ```
+
+Deux pièges à connaître dans cet en-tête (c'est du YAML) :
+- `skills: duplicate-report` **précharge** la Skill de format dans le subagent : sans ce champ, il ne
+  voit pas forcément la Skill et risque d'inventer son propre format ;
+- dans `description`, évite la suite de caractères `: ` (deux-points + espace), par exemple
+  `(ex: deplacer...)` : le YAML devient invalide et le subagent n'est pas chargé. Écris
+  `(par exemple ...)` ou mets la description entre guillemets.
 
 ## 3. Les Skills : un format de rapport standard
 
@@ -119,13 +125,21 @@ Dans `travel-planner-agent/`, la veille tarifaire tourne dans un workflow GitHub
 general sur un disque local ou un NAS domestique : un runner GitHub Actions dans le cloud n'y a pas
 acces. Ce projet est donc pense pour une execution **locale** planifiee.
 
-Exemple de ligne crontab (sur une machine Linux/macOS ou le depot est clone, et ou la bibliotheque
-est accessible) pour lancer la verification de sauvegarde chaque dimanche a 7h :
+Exemple de ligne crontab (`crontab -e` sur une machine Linux/macOS où le dépôt est cloné et où la
+bibliothèque est accessible) pour lancer la vérification de sauvegarde chaque dimanche à 7h. Une ligne
+crontab doit tenir sur **une seule ligne** (pas de `\` de continuation), et cron ne charge pas ton
+profil shell : il faut donc donner des chemins absolus et la clé API (ici lue depuis un fichier `.env`
+non commité) :
 ```cron
-0 7 * * 0 cd /chemin/vers/photo-storage-agent/agent-sdk && \
-  python check_backup_integrity.py --source /chemin/photos --backup /chemin/sauvegarde \
-  >> /chemin/vers/photo-storage-agent/reports/backup-integrity/cron.log 2>&1
+0 7 * * 0 . /chemin/vers/photo-storage-agent/.env && /chemin/vers/photo-storage-agent/.venv/bin/python /chemin/vers/photo-storage-agent/agent-sdk/check_backup_integrity.py --source /chemin/photos --backup /chemin/sauvegarde >> /chemin/vers/photo-storage-agent/reports/cron.log 2>&1
 ```
+avec un fichier `.env` contenant `export ANTHROPIC_API_KEY=...` (déjà ignoré par Git).
+
+Les scripts de `agent-sdk/` tournent avec des garde-fous stricts (`permission_mode="dontAsk"`, seule
+commande shell autorisée : `./scripts/hash_scan.sh`, écriture limitée à `reports/`, plafond de coût) :
+voir [`agent-sdk/README.md`](../agent-sdk/README.md). Le script `hash_scan.sh` produit des **chemins
+relatifs** au dossier scanné, ce qui permet de comparer directement l'inventaire de la bibliothèque et
+celui de sa sauvegarde.
 
 Si ta bibliotheque est elle-meme hebergee sur un service accessible par API (un bucket cloud avec
 API REST, par exemple), le meme principe que `price-watch.yml` redevient applicable : un workflow

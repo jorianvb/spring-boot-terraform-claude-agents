@@ -1,9 +1,9 @@
 ---
-name: itinerary-builder
+name: itinerary-format
 description: A utiliser pour formater un itineraire de voyage jour par jour. Utiliser systematiquement en sortie du subagent itinerary-builder.
 ---
 
-# Format de l'itineraire
+# Format de l'itineraire (Skill itinerary-format)
 
 Ecrire le resultat dans `docs/itineraries/<voyage>.md` avec cette structure :
 

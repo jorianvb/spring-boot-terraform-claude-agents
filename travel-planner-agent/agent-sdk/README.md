@@ -7,7 +7,9 @@ brancher sur une tache planifiee (cron, GitHub Actions) plutot que de les lancer
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+cd travel-planner-agent
+python -m venv .venv && source .venv/bin/activate   # Python 3.10+
+pip install -r agent-sdk/requirements.txt
 export ANTHROPIC_API_KEY="..."   # cle API du Claude Console, jamais en dur dans le code
 ```
 
@@ -18,8 +20,10 @@ export ANTHROPIC_API_KEY="..."   # cle API du Claude Console, jamais en dur dans
 - `research_destination.py` : lance le subagent `destination-researcher` sur une destination donnee
   en argument de ligne de commande.
 
-Ces scripts chargent automatiquement les Skills et subagents de `.claude/` de ce projet
-(l'Agent SDK lit `.claude/` comme le ferait Claude Code).
+Ces scripts chargent les Skills et subagents de `.claude/` de ce projet (`setting_sources=["project"]`)
+et tournent sans humain : `permission_mode="dontAsk"` refuse tout outil qui n'est pas dans
+`allowed_tools`, l'ecriture est limitee a `reports/` (ou `docs/destinations/`), et chaque execution est
+plafonnee (`max_turns`, `max_budget_usd`).
 
 ## Lancer une veille ponctuelle
 
@@ -30,5 +34,6 @@ python agent-sdk/research_destination.py "Lisbonne, Portugal"
 
 ## Lancer en automatique
 
-Voir `.github/workflows/price-watch.yml` pour un exemple de tache planifiee (cron GitHub Actions)
-qui execute `watch_prices.py` chaque jour et commite le rapport mis a jour dans le depot.
+Voir `.github/workflows/price-watch.yml` **a la racine du depot** (GitHub ignore les workflows
+ranges dans un sous-dossier) : une tache planifiee (cron GitHub Actions) qui execute
+`watch_prices.py` chaque jour et commite le rapport mis a jour dans le depot.

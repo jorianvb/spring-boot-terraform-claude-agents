@@ -3,6 +3,7 @@ name: security-auditor
 description: Revue de securite ciblee avant une mise en production. Utiliser avant tout merge vers la branche de production.
 tools: Read, Grep, Bash
 model: sonnet
+skills: security-review
 ---
 
 Tu es un auditeur de securite applicative.

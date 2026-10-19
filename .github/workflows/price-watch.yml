@@ -1,0 +1,67 @@
+# Veille tarifaire quotidienne (projet travel-planner-agent).
+#
+# IMPORTANT (monorepo) : ce fichier doit rester dans .github/workflows/ à la racine du dépôt,
+# sinon GitHub ne l'exécute jamais. Les commandes tournent dans travel-planner-agent/
+# grâce à `defaults.run.working-directory`.
+#
+# Prérequis : le secret ANTHROPIC_API_KEY dans Settings > Secrets and variables > Actions.
+# Sans ce secret, le job s'arrête proprement (pas d'échec quotidien).
+# Note : GitHub n'exécute les tâches planifiées que depuis la branche par défaut, et les
+# désactive après 60 jours sans activité sur un dépôt public.
+
+name: Veille tarifaire quotidienne
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # tous les jours à 6h UTC
+  workflow_dispatch: {} # lancement manuel possible depuis l'onglet Actions
+
+permissions:
+  contents: write # pour committer le rapport mis à jour
+
+concurrency:
+  group: price-watch
+  cancel-in-progress: false
+
+jobs:
+  price-watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30 # disjoncteur : un agent bloqué ne tourne pas indéfiniment
+    defaults:
+      run:
+        working-directory: travel-planner-agent
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Vérifier que la clé API est configurée
+        id: check
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "Secret ANTHROPIC_API_KEY absent : veille ignorée."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v6
+        if: steps.check.outputs.skip != 'true'
+
+      - uses: actions/setup-python@v6
+        if: steps.check.outputs.skip != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        if: steps.check.outputs.skip != 'true'
+        run: pip install -r agent-sdk/requirements.txt
+
+      - name: Lancer la veille tarifaire
+        if: steps.check.outputs.skip != 'true'
+        run: python agent-sdk/watch_prices.py
+
+      - name: Committer le rapport mis à jour
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet || git commit -m "Mise à jour automatique de la veille tarifaire"
+          git push

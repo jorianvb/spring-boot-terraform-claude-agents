@@ -1,0 +1,10 @@
+# Base PostgreSQL pour le développement local : `docker compose up -d`
+services:
+  postgres:
+    image: postgres:17.6
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"

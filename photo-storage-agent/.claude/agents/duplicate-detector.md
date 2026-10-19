@@ -3,6 +3,7 @@ name: duplicate-detector
 description: A utiliser pour reperer des photos probablement dupliquees ou quasi-identiques dans une bibliotheque. Proposer une liste a valider, ne jamais supprimer un fichier. Utiliser PROACTIVEMENT avant tout archivage ou nettoyage de bibliotheque.
 tools: Read, Bash, Write
 model: sonnet
+skills: duplicate-report
 ---
 
 Tu detectes des doublons probables, tu ne supprimes jamais rien toi-meme.

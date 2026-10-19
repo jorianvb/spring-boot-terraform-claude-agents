@@ -25,6 +25,7 @@ terraform/
     └── dev/     # composition des modules pour l'environnement de dev
 ```
 
-Le state est stocke dans un backend distant (S3 + verrouillage DynamoDB, par exemple), jamais en local.
+Le state est stocke dans un backend distant (S3 avec `use_lockfile = true`, verrouillage natif depuis
+Terraform 1.10 ; l'ancienne table DynamoDB est depreciee), jamais en local.
 Toute application (`terraform apply`) est precedee d'un `terraform plan` relu par un humain
 (ou par le subagent `terraform-reviewer`, voir `.claude/agents/terraform-reviewer.md`).

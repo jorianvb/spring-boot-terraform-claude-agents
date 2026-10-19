@@ -10,7 +10,7 @@ Sur le diff ou le module concerne, verifier :
 2. Secrets en dur dans le code, les logs, ou les messages de commit.
 3. Configuration CORS trop permissive.
 4. Controles d'authentification/autorisation sur chaque nouvel endpoint.
-5. Dependances avec vulnerabilites connues (verifier le rapport `mvn dependency-check` si disponible).
+5. Dependances avec vulnerabilites connues (plugin OWASP : `mvn org.owasp:dependency-check-maven:check`, ou l'alerte Dependabot de GitHub).
 
 Produire une liste de constats classes par severite, avec pour chacun un correctif propose.
 Ne jamais appliquer un correctif de securite sans validation humaine explicite.

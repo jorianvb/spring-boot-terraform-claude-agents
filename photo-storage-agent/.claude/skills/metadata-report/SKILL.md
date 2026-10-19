@@ -26,7 +26,7 @@ Nombre de photos analysees : <N>
 
 | Fichier | Date (EXIF) | Lieu resolu | Source de la resolution | Legende proposee | Alerte |
 |---|---|---|---|---|---|
-| IMG_0012.jpg | 2026-07-03 | Lisbonne, Portugal | GPS EXIF -> reverse geocoding (date du jour) | Vue sur le pont du 25 avril au coucher du soleil | - |
+| IMG_0012.jpg | 2026-07-03 | Lisbonne, Portugal | GPS EXIF -> geocodage inverse hors ligne | Vue sur le pont du 25 avril au coucher du soleil | - |
 | IMG_0013.jpg | absente | inconnu | - | Interieur, piece non identifiable | Date manquante |
 
 ## Photos a verifier manuellement
@@ -34,15 +34,16 @@ Liste des fichiers pour lesquels l'agent n'est pas sur (date suspecte, legende i
 plusieurs lieux possibles a quelques metres d'ecart). A valider par l'utilisateur.
 
 ## Notes
-- Le lieu resolu doit toujours venir des coordonnees GPS presentes dans le fichier (reverse
-  geocoding), jamais d'une supposition sur le contenu de l'image.
+- Le lieu resolu doit toujours venir des coordonnees GPS presentes dans le fichier (geocodage
+  inverse **hors ligne**, sans envoyer la coordonnee a un service web), jamais d'une supposition
+  sur le contenu de l'image.
 - La legende proposee decrit uniquement ce qui est visible sur l'image, sans extrapoler sur les
   personnes, leur identite ou le contexte.
 - Aucune modification n'est faite sur les fichiers originaux : ce rapport est une proposition.
 ```
 
 ## Regles
-- Toujours dater le rapport (`asof`).
+- Toujours dater le rapport (ligne "Date d'analyse" en tete).
 - Ne jamais indiquer une date ou un lieu comme certain si la source est une supposition : marquer
   "a verifier" dans la colonne Alerte.
 - Ne jamais republier les coordonnees GPS precises ailleurs que dans ce rapport interne (pas dans

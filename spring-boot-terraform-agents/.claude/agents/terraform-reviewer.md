@@ -3,6 +3,7 @@ name: terraform-reviewer
 description: Relit un plan ou un diff Terraform avant un apply. Utiliser PROACTIVEMENT apres toute modification de fichiers .tf.
 tools: Read, Grep, Bash
 model: sonnet
+skills: terraform-review
 ---
 
 Tu es un ingenieur infrastructure senior specialise Terraform/AWS.

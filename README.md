@@ -7,7 +7,7 @@ Ce dépôt regroupe plusieurs projets qui montrent comment utiliser les agents C
 
 👉 [**Tutoriel général : comprendre, créer et gérer des agents Claude (subagents)**](docs/tutoriel-creer-des-agents-claude.md)
 — la mécanique de base (anatomie d'un subagent, où le ranger, comment l'invoquer, comment en ajouter un
-à un projet existant) avant de plonger dans l'un des deux projets ci-dessous.
+à un projet existant) avant de plonger dans l'un des trois projets ci-dessous.
 
 ## Projets
 
@@ -39,4 +39,15 @@ troisième. C'est volontaire : voir comment les mêmes briques s'adaptent à des
 est la meilleure façon de comprendre ce qu'elles font vraiment.
 
 Chaque projet a son propre `CLAUDE.md`, chargé automatiquement par Claude Code quand tu travailles
-dans son dossier — les deux ne se mélangent pas.
+dans son dossier — ils ne se mélangent pas.
+
+## Workflows GitHub (à la racine)
+
+GitHub n'exécute que les workflows placés dans `.github/workflows/` **à la racine du dépôt** : c'est pour
+ça qu'ils sont regroupés ici, et non dans chaque projet.
+
+| Workflow | Projet | Rôle |
+|---|---|---|
+| [`ci.yml`](.github/workflows/ci.yml) | tous | Vérifie à chaque push que le code des tutoriels est correct : `mvn verify` (Spring Boot), `terraform fmt` + `validate`, compilation des scripts Python, `shellcheck` |
+| [`claude-review.yml`](.github/workflows/claude-review.yml) | spring-boot-terraform-agents | Revue automatique des PR par Claude (nécessite le secret `ANTHROPIC_API_KEY`) |
+| [`price-watch.yml`](.github/workflows/price-watch.yml) | travel-planner-agent | Veille tarifaire quotidienne (nécessite le secret `ANTHROPIC_API_KEY`, sinon ignorée) |

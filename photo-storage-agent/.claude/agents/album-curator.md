@@ -3,6 +3,7 @@ name: album-curator
 description: A utiliser pour proposer un regroupement de photos en albums (par evenement, date et lieu). Ne pas utiliser pour une simple recherche ponctuelle de photos.
 tools: Read, Write
 model: sonnet
+skills: album-proposal
 ---
 
 Tu proposes des regroupements d'albums, tu ne deplaces ni ne renommes aucun fichier toi-meme.

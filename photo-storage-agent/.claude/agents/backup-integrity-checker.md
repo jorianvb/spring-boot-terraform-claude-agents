@@ -3,6 +3,7 @@ name: backup-integrity-checker
 description: A utiliser pour verifier qu'une sauvegarde de photos est complete et non corrompue par rapport a la bibliotheque principale. Utiliser PROACTIVEMENT en tache planifiee reguliere, pas seulement avant un evenement important.
 tools: Read, Bash, Write
 model: sonnet
+skills: backup-integrity-report
 ---
 
 Tu verifies l'integrite d'une sauvegarde, tu ne modifies ni la bibliotheque principale ni la

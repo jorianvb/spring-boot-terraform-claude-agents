@@ -66,7 +66,7 @@ Chaque recherche produit un document structuré, toujours au même format, grâc
 | Skill | Document produit |
 |---|---|
 | `destination-dossier` | `docs/destinations/<ville>.md` |
-| `itinerary-builder` | `docs/itineraries/<voyage>.md` |
+| `itinerary-format` | `docs/itineraries/<voyage>.md` |
 | `price-watch-report` | `reports/price-history/<recherche>.md` |
 | `packing-list` | `docs/trips/<voyage>-bagages.md` |
 | `trip-budget` | `docs/trips/<voyage>-budget.md` |
@@ -93,18 +93,27 @@ claude
 Le dossier `agent-sdk/` contient deux scripts qui utilisent le **Agent SDK Python** (`claude-agent-sdk`) pour lancer un agent par programme, sans session interactive :
 
 ```bash
+cd travel-planner-agent
+python -m venv .venv && source .venv/bin/activate   # Python 3.10+
 pip install -r agent-sdk/requirements.txt
-export ANTHROPIC_API_KEY="..."
+export ANTHROPIC_API_KEY="..."   # clé du Claude Console, jamais en dur dans le code
 
 python agent-sdk/research_destination.py "Lisbonne, Portugal"
 python agent-sdk/watch_prices.py   # relance price-watcher sur toute la watchlist.json
 ```
 
-Ces scripts pointent l'Agent SDK sur le dossier du projet (`cwd`), ce qui lui permet de charger automatiquement les Skills et subagents de `.claude/` — exactement comme le ferait Claude Code en session interactive.
+Ce que règlent ces scripts (voir `ClaudeAgentOptions` dans le code) :
+
+- `cwd` + `setting_sources=["project"]` : l'Agent SDK charge le `CLAUDE.md`, les subagents et les Skills du projet, comme Claude Code en session interactive ;
+- `permission_mode="dontAsk"` + `allowed_tools=[...]` : personne n'est là pour valider une demande de permission, donc tout ce qui n'est pas explicitement autorisé est refusé. Sans ce réglage, l'agent ne pourrait pas écrire son rapport ;
+- `Edit(/reports/**)` : l'agent ne peut écrire **que** dans `reports/` (cette règle couvre aussi l'outil Write) ;
+- `max_turns` et `max_budget_usd` : le disjoncteur et le plafond de dépense par exécution.
+
+Le paquet `claude-agent-sdk` embarque Claude Code : pas besoin de l'installer à part sur la machine qui exécute le script.
 
 ### 4.3 En tâche planifiée (cron GitHub Actions)
 
-Le fichier `.github/workflows/price-watch.yml` lance `watch_prices.py` **chaque jour à 6h UTC**, et committe automatiquement le rapport mis à jour dans `reports/price-history/`. Il suffit d'ajouter la clé `ANTHROPIC_API_KEY` dans les secrets du dépôt GitHub.
+Le fichier [`.github/workflows/price-watch.yml`](../../.github/workflows/price-watch.yml) (à la **racine** du dépôt : GitHub ignore les workflows rangés dans un sous-dossier) lance `watch_prices.py` **chaque jour à 6h UTC**, et committe automatiquement le rapport mis à jour dans `reports/price-history/`. Il suffit d'ajouter la clé `ANTHROPIC_API_KEY` dans les secrets du dépôt GitHub (Settings > Secrets and variables > Actions) ; sans elle, le job s'arrête proprement au lieu d'échouer tous les jours.
 
 C'est l'équivalent, pour ce projet, du workflow de revue de PR du projet Spring Boot : **une tâche qui tourne seule, et qui écrit un résultat que tu relis ensuite** — jamais une tâche qui agit de façon irréversible (acheter, réserver) sans toi.
 
@@ -112,8 +121,8 @@ C'est l'équivalent, pour ce projet, du workflow de revue de PR du projet Spring
 
 D'après les retours d'expérience sur ce sujet (voir liens en section 8) :
 - **Définis les tâches dans un fichier de données** (comme `watchlist.json` ici), pas en dur dans le code : modifier une recherche ne doit pas demander de changer de script.
-- **Limite chaque exécution** (nombre de tours, budget de tokens) pour éviter qu'un agent ne tourne en boucle sans fin.
-- **Prévois un "disjoncteur"** : si plusieurs exécutions échouent de suite, arrête la tâche plutôt que de laisser le cron la relancer indéfiniment en consommant des crédits API.
+- **Limite chaque exécution** (nombre de tours, budget de tokens) pour éviter qu'un agent ne tourne en boucle sans fin — ici `max_turns`, `max_budget_usd` et `timeout-minutes` dans le workflow.
+- **Prévois un "disjoncteur"** : si plusieurs exécutions échouent de suite, arrête la tâche plutôt que de laisser le cron la relancer indéfiniment en consommant des crédits API. Ici, le script renvoie un code d'erreur quand une recherche échoue : l'échec est visible dans l'onglet Actions, et tu peux désactiver le workflow d'un clic.
 - **Garde une mémoire courte et à jour** (ici, les fichiers `reports/price-history/*.md`) plutôt que de tout refaire depuis zéro à chaque exécution.
 - **Mets un plafond de dépense** côté Claude Console, pour ne jamais être surpris par la facture d'une tâche automatisée qui tourne tous les jours.
 
@@ -161,6 +170,7 @@ Dans ce projet, le "multi-agent parallèle" n'est pas encore implémenté comme 
 ## 8. Liens utiles <a name="8-liens"></a>
 
 - [Claude Agent SDK — vue d'ensemble officielle](https://code.claude.com/docs/en/agent-sdk/overview)
+- [Agent SDK — permissions (`dontAsk`, `allowed_tools`)](https://code.claude.com/docs/en/agent-sdk/permissions)
 - [Comment Anthropic a construit son système de recherche multi-agent](https://theaiengineer.substack.com/p/how-anthropic-built-multi-agent-deep)
 - [Faire tourner un agent Claude sur un cron : mémoire persistante et gestion des erreurs](https://kjetilfuras.com/run-claude-agent-on-schedule/)
 - [Building Agents with Claude: From Skills to Scheduled Tasks and Routines](https://hatchworks.com/?p=35376)

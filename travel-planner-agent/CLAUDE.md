@@ -7,7 +7,7 @@ agence de voyage : aucun agent ne reserve, n'achete ni ne cree de compte a la pl
 
 ## Organisation des documents
 - `docs/destinations/<ville>.md` : dossiers de recherche destination (voir Skill `destination-dossier`).
-- `docs/itineraries/<voyage>.md` : itineraires jour par jour (voir Skill `itinerary-builder`).
+- `docs/itineraries/<voyage>.md` : itineraires jour par jour (voir Skill `itinerary-format`).
 - `docs/trips/<voyage>.md` : suivi consolide d'un voyage (tenu par le subagent `trip-journal-writer`).
 - `reports/price-history/<recherche>.md` : historique de veille tarifaire (voir Skill `price-watch-report`).
 
@@ -15,7 +15,8 @@ agence de voyage : aucun agent ne reserve, n'achete ni ne cree de compte a la pl
 1. `destination-researcher` : produit le dossier destination.
 2. `itinerary-builder` : produit l'itineraire a partir du dossier destination + contraintes (dates, budget, interets).
 3. `local-events-scout` : verifie les evenements locaux sur la fenetre de dates choisie.
-4. `price-watcher` : surveille les prix (manuellement ou en tache planifiee, voir agent-sdk/ et .github/workflows/).
+4. `price-watcher` : surveille les prix (manuellement ou en tache planifiee, voir agent-sdk/ et
+   `.github/workflows/price-watch.yml` a la racine du depot).
 5. `trip-journal-writer` : consolide tout dans un document de suivi unique.
 
 ## Regles

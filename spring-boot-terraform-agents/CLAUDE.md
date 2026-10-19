@@ -2,7 +2,7 @@
 
 ## Projet
 API Spring Boot (DDD) + infrastructure Terraform (AWS).
-Backend Java 21 / Spring Boot 3.x. Infra : Terraform, environnements sous `terraform/envs/`.
+Backend Java 21 / Spring Boot 4.x. Infra : Terraform, environnements sous `terraform/envs/`.
 
 ## Architecture
 Voir @docs/architecture.md pour le détail. En résumé : chaque module métier est organisé en
@@ -10,7 +10,7 @@ Voir @docs/architecture.md pour le détail. En résumé : chaque module métier 
 
 ## Commandes
 - Build + tests Java : `mvn verify` (depuis `spring-boot-app/`)
-- Lancer l'appli en local : `mvn spring-boot:run`
+- Lancer l'appli en local : `docker compose up -d` (PostgreSQL) puis `mvn spring-boot:run` (depuis `spring-boot-app/`)
 - Terraform (depuis `terraform/envs/dev`) : `terraform fmt -check`, `terraform validate`, `terraform plan`
 
 ## Règles

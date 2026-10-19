@@ -1,0 +1,3 @@
+-- Migration initiale (vide) : chaque nouvelle table arrive dans une migration V2__..., V3__...
+-- Voir la Skill jpa-entity.
+SELECT 1;
