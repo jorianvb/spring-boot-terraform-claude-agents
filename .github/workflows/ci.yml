@@ -37,7 +37,7 @@ jobs:
         working-directory: spring-boot-terraform-agents/terraform
     steps:
       - uses: actions/checkout@v6
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
       - run: terraform fmt -check -recursive
       - name: terraform validate (envs/dev, sans backend distant)
         working-directory: spring-boot-terraform-agents/terraform/envs/dev
